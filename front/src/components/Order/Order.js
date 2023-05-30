@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 
-function MenuEditAdmin() {
+function Order() {
 
     const [menu, SetMenu] = useState("Main");
 
@@ -89,4 +89,4 @@ function MenuEditAdmin() {
 }
 
 
-export default MenuEditAdmin;
+export default Order;
