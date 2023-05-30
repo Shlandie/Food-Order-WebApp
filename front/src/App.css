@@ -1,13 +1,6 @@
 @import url('https://fonts.googleapis.com/css2? family= Cherry+Bomb+One & display=swap');
-/* 
-.navigation {
-  font-family: 'Cherry Bomb One', cursive;
-  color: white;
 
-  height: fit-content;
-  padding: 30px 0px;
-  background-color: rgb(39, 38, 38);
-} */
+/* Navigation */
 
 .navigation__main {
   font-family: 'Cherry Bomb One', cursive;
@@ -45,4 +38,46 @@
 
 .navigation__logo {
   font-size: 42px;
+}
+
+/* Button Navigation for order page and menu edit page */
+
+.buttonNavigation {
+  font-family: 'Cherry Bomb One', cursive;
+
+  display: flex;
+  justify-content: space-around;
+
+  margin: 0 auto;
+  width: 20%;
+  background-color: rgb(39, 38, 38);
+}
+
+.buttonNavigation__button {
+  all: unset;
+
+
+  color: white;
+  background-color: black;
+
+}
+
+.orderItems {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+
+  margin-top: 30px;
+}
+
+.orderItem {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 600px;
+  max-width: 600px;
+  margin: 0 30px;
+  margin-bottom: 90px;
+  border: 4px solid black;
 }
