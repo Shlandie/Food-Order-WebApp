@@ -10,13 +10,7 @@ function MenuEditAdmin() {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
 
-    const [toggle, setToggle] = useState(false);
-
-    const [itemCreate, setItemCreate] = useState({
-        // name: "",
-        // description: "",
-        // price: 0
-    });
+    const [itemCreate, setItemCreate] = useState("");
 
 
 
@@ -29,35 +23,52 @@ function MenuEditAdmin() {
     }
 
     useEffect(() => {
-        setMenu(menu => [...menu, itemCreate]);
+        if (itemCreate.length !== 0) {
+            setMenu(menu => [itemCreate, ...menu]);
+
+            fetch("http://localhost:5000/menu",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(itemCreate)
+                }
+            )
+        }
     }, [itemCreate])
 
+    const getData = async () => {
+        const response = await fetch("http://localhost:5000/menu");
+        const data = await response.json();
+        // console.log(data);
+        setMenu(data.data.allMenuItems.reverse());
+    };
+    useEffect(() => {
+        getData();
+    }, []);
+
     // useEffect(() => {
-    //     fetch("https://localhost:5000/menu")
+    //     fetch("http://localhost:5000/menu")
     //         .then(res => {
     //             return res.json();
     //         })
     //         .then(data => {
-    //             setMenu(data);
+    //             setMenu(data.allMenuItems);
     //         })
     // }, [])
+
 
     // useEffect(() => {
     //     fetch("https://localhost:5000/menu",
     //         {
     //             method: "POST",
     //             headers: {
-    //                 "Content Type": "application/json"
+    //                 "Content-Type": "application/json"
     //             },
     //             body: JSON.stringify(menu)
     //         }
     //     )
-    //         .then(res => {
-    //             return res.json();
-    //         })
-    //         .then(data => {
-    //             SetMenu(data);
-    //         })
     // }, [menu])
     return (
         <>
@@ -77,7 +88,7 @@ function MenuEditAdmin() {
                 ></textarea>
 
                 <label for="price">Single Unit Price:</label>
-                <input type="number" value={price} required min="0"
+                <input type="number" value={price} required step="0.01" min="0"
                     onChange={(e) => setPrice(e.target.value)}
                 ></input>
 
@@ -85,14 +96,14 @@ function MenuEditAdmin() {
             </form >
 
             <div className='orderItems'>
-                {menu.map((item) => (
+                {menu && menu.map((item) => (
                     <div className='orderItem' key={item.id}>
                         <img src="" alt="Pancakes" />
                         <h4>{item.name}</h4>
                         <p>
                             {item.description}
                         </p>
-                        <h6>{item.price}</h6>
+                        <h6>{item.price} Eur</h6>
                     </div>
                 ))}
             </div>
