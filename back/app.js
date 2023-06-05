@@ -8,6 +8,7 @@ dotenv.config();
 const cors = require("cors");
 
 const menuRoutes = require("./routes/menuRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 mongoose
     .connect(process.env.MONGO_URL, { dbName: "restaurant" })
@@ -25,7 +26,8 @@ app.use((req, res, next) => {
 
 app.use(cors());
 
-app.use("/", menuRoutes);
+app.use("/menu", menuRoutes);
+app.use("/order", orderRoutes);
 
 app.listen(5000, () => {
     console.log("Listening on port 5000");

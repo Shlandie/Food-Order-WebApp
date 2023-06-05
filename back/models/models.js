@@ -12,6 +12,19 @@ const ItemSchema = new mongoose.Schema({
     }
 })
 
-const Item = new mongoose.model("item", ItemSchema);
+const OrderSchema = new mongoose.Schema(
+    {
+        dishes: [{
+            type: String
+        }],
+        full_amount: {
+            type: Number
+        }
+    }
 
-module.exports = { Item };
+)
+
+const Item = new mongoose.model("item", ItemSchema);
+const Order = new mongoose.model("order", OrderSchema);
+
+module.exports = { Item, Order };
