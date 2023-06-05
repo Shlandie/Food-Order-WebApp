@@ -14,6 +14,9 @@ const ItemSchema = new mongoose.Schema({
 
 const OrderSchema = new mongoose.Schema(
     {
+        order_id: {
+            type: String
+        },
         dishes: [{
             type: String
         }],
