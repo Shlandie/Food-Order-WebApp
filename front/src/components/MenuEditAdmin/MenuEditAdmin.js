@@ -38,6 +38,8 @@ function MenuEditAdmin() {
         }
     }, [itemCreate])
 
+    // GET Menu items
+
     const getData = async () => {
         const response = await fetch("http://localhost:5000/menu");
         const data = await response.json();
@@ -48,28 +50,34 @@ function MenuEditAdmin() {
         getData();
     }, []);
 
-    // useEffect(() => {
-    //     fetch("http://localhost:5000/menu")
-    //         .then(res => {
-    //             return res.json();
-    //         })
-    //         .then(data => {
-    //             setMenu(data.allMenuItems);
-    //         })
-    // }, [])
+    //    POST item
+    useEffect(() => {
+        if (itemCreate.length !== 0) {
+            setMenu(menu => [itemCreate, ...menu]);
 
+            fetch("http://localhost:5000/menu",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(itemCreate)
+                }
+            )
+        }
+    }, [itemCreate])
 
-    // useEffect(() => {
-    //     fetch("https://localhost:5000/menu",
-    //         {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json"
-    //             },
-    //             body: JSON.stringify(menu)
-    //         }
-    //     )
-    // }, [menu])
+    // Handle Order DELETE
+
+    const handleDelete = (itemID) => {
+        console.log(itemID);
+        fetch(`http://localhost:5000/menu/${itemID}`,
+            {
+                method: "DELETE",
+            }
+        )
+    }
+
     return (
         <>
             <form className="menuAddForm" onSubmit={handleSubmit}>
@@ -96,7 +104,7 @@ function MenuEditAdmin() {
             </form >
 
             <div className='orderItems'>
-                {menu && menu.map((item) => (
+                {menu && menu.map((item, index) => (
                     <div className='orderItem' key={item.id}>
                         <img src="" alt="Pancakes" />
                         <h4>{item.name}</h4>
@@ -104,6 +112,12 @@ function MenuEditAdmin() {
                             {item.description}
                         </p>
                         <h6>{item.price} Eur</h6>
+                        <button onClick={(e) => {
+                            handleDelete(item._id);
+                            const copy = [...menu];
+                            copy.splice(index, 1);
+                            setMenu(copy);
+                        }}>Delete Menu Item</button>
                     </div>
                 ))}
             </div>
