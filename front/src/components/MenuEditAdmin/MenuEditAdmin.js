@@ -5,9 +5,11 @@ import { useEffect } from "react";
 function MenuEditAdmin() {
 
     const [menu, setMenu] = useState([]);
+    const [menuFilter, setMenuFilter] = useState("Main");
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
+    const [category, setCategory] = useState("Main");
     const [price, setPrice] = useState("");
 
     const [itemCreate, setItemCreate] = useState("");
@@ -16,45 +18,32 @@ function MenuEditAdmin() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setItemCreate(itemCreate => ({ ...itemCreate, name: name, description: description, price: price }));
+        setItemCreate(itemCreate => ({ ...itemCreate, name: name, description: description, category: category, price: price }));
         setName("");
         setDescription("");
+        setCategory("Main");
         setPrice(0);
     }
 
-    useEffect(() => {
-        if (itemCreate.length !== 0) {
-            setMenu(menu => [itemCreate, ...menu]);
-
-            fetch("http://localhost:5000/menu",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(itemCreate)
-                }
-            )
-        }
-    }, [itemCreate])
 
     // GET Menu items
 
-    const getData = async () => {
-        const response = await fetch("http://localhost:5000/menu");
+    const getData = async (menuFilter) => {
+        const response = await fetch(`http://localhost:5000/menu/${menuFilter}`);
         const data = await response.json();
         // console.log(data);
         setMenu(data.data.allMenuItems.reverse());
     };
     useEffect(() => {
-        getData();
-    }, []);
+        getData(menuFilter);
+    }, [menuFilter]);
 
     //    POST item
     useEffect(() => {
         if (itemCreate.length !== 0) {
-            setMenu(menu => [itemCreate, ...menu]);
-
+            if (itemCreate.category === menuFilter) {
+                setMenu(menu => [itemCreate, ...menu]);
+            }
             fetch("http://localhost:5000/menu",
                 {
                     method: "POST",
@@ -80,9 +69,14 @@ function MenuEditAdmin() {
 
     return (
         <>
+
+            <div className='buttonNavigation'>
+                <button className='buttonNavigation__button' onClick={(e) => setMenuFilter("Main")}>Main</button>
+                <button className='buttonNavigation__button' onClick={(e) => setMenuFilter("Desert")} > Deserts</button>
+                <button className='buttonNavigation__button' onClick={(e) => setMenuFilter("Drink")} > Drinks</button >
+            </div >
+
             <form className="menuAddForm" onSubmit={handleSubmit}>
-                {/* <label for="picture">Picture:</label>
-        <input type="file" required></input> */}
 
                 <label for="name">Name:</label>
                 <input type="text" name="name" placeholder="Food Name" value={name} required
@@ -94,6 +88,16 @@ function MenuEditAdmin() {
                 <textarea name="description" placeholder="List of ingredients and the dishes characteristics" value={description} required
                     onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
+
+                <label>Category:</label>
+                <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                >
+                    <option value="Main">Main</option>
+                    <option value="Desert">Desert</option>
+                    <option value="Drink">Drink</option>
+                </select>
 
                 <label for="price">Single Unit Price:</label>
                 <input type="number" value={price} required step="0.01" min="0"

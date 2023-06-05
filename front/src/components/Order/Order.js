@@ -14,7 +14,7 @@ function Order() {
 
     // Menu items
     const [menu, setMenu] = useState([]);
-
+    const [menuFilter, setMenuFilter] = useState("Main");
     // Order List
 
     const [orderItem, setOrderItem] = useState({});
@@ -37,16 +37,16 @@ function Order() {
             })
     }
 
-    const getData = async () => {
-        const response = await fetch("http://localhost:5000/menu");
+    const getData = async (menuFilter) => {
+        const response = await fetch(`http://localhost:5000/menu/${menuFilter}`);
         const data = await response.json();
         // console.log(data);
         setMenu(data.data.allMenuItems.reverse());
     };
     useEffect(() => {
         console.log(order);
-        getData();
-    }, []);
+        getData(menuFilter);
+    }, [menuFilter]);
 
     useEffect(() => {
 
@@ -64,8 +64,8 @@ function Order() {
     return (
         <>
 
-            <Button variant="primary" onClick={handleShow}>
-                Launch
+            <Button className="cartButton" variant="primary" onClick={handleShow}>
+                My Order
             </Button>
 
             <Offcanvas show={show} placement="end" onHide={handleClose}>
@@ -94,10 +94,10 @@ function Order() {
             </Offcanvas>
 
             <div className='buttonNavigation'>
-                <button className='buttonNavigation__button'>Main</button>
-                <button className='buttonNavigation__button'>Deserts</button>
-                <button className='buttonNavigation__button'>Drinks</button>
-            </div>
+                <button className='buttonNavigation__button' onClick={(e) => setMenuFilter("Main")}>Main</button>
+                <button className='buttonNavigation__button' onClick={(e) => setMenuFilter("Desert")} > Deserts</button>
+                <button className='buttonNavigation__button' onClick={(e) => setMenuFilter("Drink")} > Drinks</button >
+            </div >
 
             <div className='orderItems'>
                 {menu && menu.map((item) => (
@@ -118,66 +118,7 @@ function Order() {
                     </div >
 
                 ))}
-                {/* <div className='orderItem'>
-                <img src="" alt="Pancakes" />
-                <h4>Pancakes</h4>
-                <p>Double glazed with butter, mega packed with juicy jam
-                    with a monster load of whipping cream. 4 of these in 1 serving!
-                </p>
-                <input type="number"></input>
-                <button onClick={(e) => { e.target.nextElementSibling }
-                }>Add to order</button>
-            </div>
 
-            <div className='orderItem'>
-                <img src="" alt="Pancakes" />
-                <h4>Pancakes</h4>
-                <p>Double glazed with butter, mega packed with juicy jam
-                    with a monster load of whipping cream. 4 of these in 1 serving!
-                </p>
-                <input type="number"></input>
-                <button>Add to order</button>
-            </div>
-
-            <div className='orderItem'>
-                <img src="" alt="Pancakes" />
-                <h4>Pancakes</h4>
-                <p>Double glazed with butter, mega packed with juicy jam
-                    with a monster load of whipping cream. 4 of these in 1 serving!
-                </p>
-                <input type="number"></input>
-                <button>Add to order</button>
-            </div>
-
-            <div className='orderItem'>
-                <img src="" alt="Pancakes" />
-                <h4>Pancakes</h4>
-                <p>Double glazed with butter, mega packed with juicy jam
-                    with a monster load of whipping cream. 4 of these in 1 serving!
-                </p>
-                <input type="number"></input>
-                <button>Add to order</button>
-            </div>
-
-            <div className='orderItem'>
-                <img src="" alt="Pancakes" />
-                <h4>Pancakes</h4>
-                <p>Double glazed with butter, mega packed with juicy jam
-                    with a monster load of whipping cream. 4 of these in 1 serving!
-                </p>
-                <input type="number"></input>
-                <button>Add to order</button>
-            </div>
-
-            <div className='orderItem'>
-                <img src="" alt="Pancakes" />
-                <h4>Pancakes</h4>
-                <p>Double glazed with butter, mega packed with juicy jam
-                    with a monster load of whipping cream. 4 of these in 1 serving!
-                </p>
-                <input type="number"></input>
-                <button>Add to order</button>
-            </div> */}
             </div >
         </>
     );
